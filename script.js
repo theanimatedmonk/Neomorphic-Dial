@@ -1,6 +1,6 @@
 // Angle → Value mapping
 const angleMap = [
-    { angle:   0, value: 200 }, // bottom
+    { angle:   0, value: 0 }, // bottom
     { angle:  45, value: 25 },
     { angle:  90, value: 50 },  // left
     { angle: 135, value: 75 },
@@ -8,7 +8,8 @@ const angleMap = [
     { angle: 225, value: 125 },
     { angle: 270, value: 150 }, // right
     { angle: 315, value: 175 },
-    { angle: 360, value: 200 }
+    { angle: 359, value: 200 },
+    { angle: 360, value: 0 }
   ];
   
   // Function to compute dial value from (x,y)
