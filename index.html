@@ -3,13 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Rive Dial Binding Example</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <!-- Load rive-js WebGL2 runtime (supports feathering) -->
     <script src="https://unpkg.com/@rive-app/webgl2@latest"></script>
     </head>
 <body>
+
+    
     <div class="content">
-    <canvas id="riveCanvas" width="800" height="800"></canvas>
+        <p>ADJUST YOUR PHONE'S VOLUME BY TURNING THE DIAL</p>
+        <div class="dial">
+        <canvas id="riveCanvas" width="800" height="800"></canvas>
+        <span id="label" class="label">100</span>
+        </div>
     </div>
 
  

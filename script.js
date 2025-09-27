@@ -11,6 +11,8 @@ const angleMap = [
     { angle: 359, value: 200 },
     { angle: 360, value: 0 }
   ];
+
+ const label = document.getElementById("label");
   
   // Function to compute dial value from (x,y)
   function getDialValue(x, y) {
@@ -81,6 +83,18 @@ const angleMap = [
         const dval = getDialValue(x, y);
         if (dval !== null) {
           propDial.value = dval;
+          // Clamp display value between 25 and 175
+          const clampedValue = Math.max(25, Math.min(175, Math.round(dval)));
+          label.innerText = clampedValue;
+          
+          // Set color based on value range
+          if (clampedValue >= 25 && clampedValue <= 100) {
+            label.style.color = "#77FF88";
+          } else if (clampedValue > 100 && clampedValue <= 125) {
+            label.style.color = "#FFBD07";
+          } else if (clampedValue > 125 && clampedValue <= 175) {
+            label.style.color = "#F45255";
+          }
         }
       };
   
