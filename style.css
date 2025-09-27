@@ -1,0 +1,22 @@
+
+html {
+    background: linear-gradient(180deg, #34373F 0%, #1D2026 100%);
+    height: 100vh;
+   
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+}
+
+#riveCanvas {
+    width: 400px;    
+    height: 400px;
+    display: block;
+}
+
+
+
