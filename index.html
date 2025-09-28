@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rive Dial Binding Example</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,14 +12,14 @@
     <script src="https://unpkg.com/@rive-app/webgl2@latest"></script>
     </head>
 <body>
-
-    
     <div class="content">
-        <p>ADJUST YOUR PHONE'S VOLUME BY TURNING THE DIAL</p>
-        <div class="dial">
-        <canvas id="riveCanvas" width="800" height="800"></canvas>
-        <span id="label" class="label">100</span>
+        <p class="font-sm" style="margin-bottom: var(--spacing-md); text-align: center;">ADJUST YOUR PHONE'S VOLUME BY TURNING THE DIAL</p>
+    <div class="container">
+        <div class="dial-wrapper">
+            <canvas id="riveCanvas" width="800" height="800"></canvas>
         </div>
+        <span id="label" class="font-lg">100</span>
+    </div>
     </div>
 
  

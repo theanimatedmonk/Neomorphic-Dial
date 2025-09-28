@@ -85,7 +85,7 @@ const angleMap = [
           propDial.value = dval;
           // Clamp display value between 25 and 175
           const clampedValue = Math.max(25, Math.min(175, Math.round(dval)));
-          label.innerText = clampedValue;
+          label.innerText = `${clampedValue}%`;
           
           // Set color based on value range
           if (clampedValue >= 25 && clampedValue <= 100) {
