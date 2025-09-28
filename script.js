@@ -17,7 +17,9 @@ class DialAudioSystem {
   constructor() {
     this.audio = null;
     this.lastRoundedValue = 0;
+    this.audioEnabled = false;
     this.loadDialSound();
+    this.enableAudioOnInteraction();
   }
 
   // Load single dial sound MP3 file
@@ -34,6 +36,28 @@ class DialAudioSystem {
     // Handle audio loading errors
     this.audio.addEventListener('error', (e) => {
       console.error('❌ Failed to load dial-sound.mp3:', e);
+    });
+  }
+
+  // Enable audio after user interaction (browser autoplay policy)
+  enableAudioOnInteraction() {
+    const enableAudio = () => {
+      if (!this.audioEnabled && this.audio) {
+        // Try to play and immediately pause to "unlock" audio
+        this.audio.play().then(() => {
+          this.audio.pause();
+          this.audio.currentTime = 0;
+          this.audioEnabled = true;
+          console.log('🔊 Audio unlocked - sounds will now play');
+        }).catch(() => {
+          console.log('⏳ Audio not yet unlocked - waiting for user interaction');
+        });
+      }
+    };
+
+    // Listen for any user interaction to enable audio
+    ['click', 'touchstart', 'keydown'].forEach(event => {
+      document.addEventListener(event, enableAudio, { once: true });
     });
   }
 
@@ -55,12 +79,14 @@ class DialAudioSystem {
   }
 
   playDialSound(value) {
-    if (this.audio) {
+    if (this.audio && this.audioEnabled) {
       console.log(`🔊 Playing dial sound at: ${value}`);
       this.audio.currentTime = 0; // Reset to beginning for rapid playback
       this.audio.play().catch(error => {
         console.warn('Failed to play dial sound:', error);
       });
+    } else if (this.audio && !this.audioEnabled) {
+      console.log(`🔇 Audio not yet enabled - dial at: ${value}`);
     }
   }
 }
@@ -93,28 +119,30 @@ const audioSystem = new DialAudioSystem();
   
   // Initialize Rive
   const riveInstance = new rive.Rive({
-    src: "volume_app.riv",              // replace with your .riv path
+    src: "neomorphic_dial.riv",              // replace with your .riv path
     canvas: document.getElementById("riveCanvas"),
+    artboard: "neomorphic dial",      // artboard name
     stateMachines: "Dial",            // state machine name
-    artboard: "Volume booster dial continuous",      // artboard name
     autoplay: true,
     autoBind: false,                  // bind manually
     fit: rive.Fit.Contain,           // scale to fit within canvas
     alignment: rive.Alignment.Center, // center the animation
     onLoad: () => {
-      console.log("Rive loaded");
-  
+      console.log("✅ Rive loaded successfully");
+
       // Access view model
       const vm = riveInstance.viewModelByName("continuous dial");
       if (!vm) {
-        console.error("ViewModel 'continuous dial' not found");
+        console.error("❌ ViewModel 'continuous dial' not found");
+        console.log("Available view models:", riveInstance.viewModelNames);
         return;
       }
   
       // Access instance
       const vmi = vm.instanceByName("default instance");
       if (!vmi) {
-        console.error("Instance 'default instance' not found");
+        console.error("❌ Instance 'default instance' not found");
+        console.log("Available instances:", vm.instanceNames);
         return;
       }
   
@@ -127,7 +155,8 @@ const audioSystem = new DialAudioSystem();
       const propDial = vmi.number("dial-value");
   
       if (!propX || !propY || !propDial) {
-        console.error("Could not access properties in view model");
+        console.error("❌ Could not access properties (x-coordinate, y-coordinate, dial-value)");
+        console.log("Available number properties:", vmi.numberNames);
         return;
       }
   
@@ -166,6 +195,14 @@ const audioSystem = new DialAudioSystem();
   
       console.log("Data binding active");
     },
-    onError: (err) => console.error("Rive error:", err),
+    onError: (err) => {
+      console.error("❌ Rive loading error:", err);
+      console.log("Troubleshooting steps:");
+      console.log("1. Check if 'neomorphic-dial.riv' file exists in the same directory");
+      console.log("2. Verify the file is not corrupted");
+      console.log("3. Check if the artboard name 'neomorphic dial' is correct");
+      console.log("4. Check if the state machine 'Dial' exists");
+      console.log("5. Try opening the file in Rive Editor to verify it's valid");
+    },
   });
   
