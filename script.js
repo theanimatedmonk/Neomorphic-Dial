@@ -12,6 +12,62 @@ const angleMap = [
     { angle: 360, value: 0 }
   ];
 
+// Audio System
+class DialAudioSystem {
+  constructor() {
+    this.audio = null;
+    this.lastRoundedValue = 0;
+    this.loadDialSound();
+  }
+
+  // Load single dial sound MP3 file
+  loadDialSound() {
+    this.audio = new Audio('sounds/dial-sound.mp3');
+    this.audio.preload = 'auto';
+    this.audio.volume = 0.8; // Adjust volume as needed
+    
+    // Log when audio file is loaded
+    this.audio.addEventListener('canplaythrough', () => {
+      console.log('🎵 Dial sound loaded successfully');
+    });
+    
+    // Handle audio loading errors
+    this.audio.addEventListener('error', (e) => {
+      console.error('❌ Failed to load dial-sound.mp3:', e);
+    });
+  }
+
+  // Check and trigger sound on every increment of 2
+  checkIncrements(currentValue) {
+    // Only play sounds within the valid range (25-175)
+    if (currentValue < 25 || currentValue > 175) {
+      return;
+    }
+
+    // Round current value to nearest 2
+    const roundedValue = Math.round(currentValue / 2) * 2;
+    
+    // Play sound if we've moved to a different increment of 2
+    if (roundedValue !== this.lastRoundedValue && roundedValue >= 25 && roundedValue <= 175) {
+      this.playDialSound(roundedValue);
+      this.lastRoundedValue = roundedValue;
+    }
+  }
+
+  playDialSound(value) {
+    if (this.audio) {
+      console.log(`🔊 Playing dial sound at: ${value}`);
+      this.audio.currentTime = 0; // Reset to beginning for rapid playback
+      this.audio.play().catch(error => {
+        console.warn('Failed to play dial sound:', error);
+      });
+    }
+  }
+}
+
+// Initialize audio system
+const audioSystem = new DialAudioSystem();
+
  const label = document.getElementById("label");
   
   // Function to compute dial value from (x,y)
@@ -86,6 +142,9 @@ const angleMap = [
           // Clamp display value between 25 and 175
           const clampedValue = Math.max(25, Math.min(175, Math.round(dval)));
           label.innerText = `${clampedValue}%`;
+          
+          // 🔊 Check for dial increments and trigger sounds
+          audioSystem.checkIncrements(clampedValue);
           
           // Set color based on value range
           if (clampedValue >= 25 && clampedValue <= 100) {
