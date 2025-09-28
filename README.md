@@ -1,3 +1,5 @@
+<img width="680" height="799" alt="image" src="https://github.com/user-attachments/assets/7079133e-9d72-4232-84fe-e90ea7146bc7" />
+
 # Neomorphic Dial
 
 A modern, interactive volume control dial with neomorphic design and real-time audio feedback.
